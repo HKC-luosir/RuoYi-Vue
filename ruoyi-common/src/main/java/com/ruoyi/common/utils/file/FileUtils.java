@@ -32,12 +32,13 @@ public class FileUtils
      * 输出指定文件的byte数组
      * 
      * @param filePath 文件路径
-     * @param os 输出流
+     * @param response 输出对象
      * @return
      */
-    public static void writeBytes(String filePath, OutputStream os) throws IOException
+    public static void writeBytes(String filePath, HttpServletResponse response) throws IOException
     {
         FileInputStream fis = null;
+        OutputStream os = null;
         try
         {
             File file = new File(filePath);
@@ -46,6 +47,9 @@ public class FileUtils
                 throw new FileNotFoundException(filePath);
             }
             fis = new FileInputStream(file);
+            response.setContentLength(fis.available());
+            response.setHeader("Content-Length", String.valueOf(fis.available()));
+            os = response.getOutputStream();
             byte[] b = new byte[1024];
             int length;
             while ((length = fis.read(b)) > 0)
