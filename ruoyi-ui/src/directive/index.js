@@ -1,3 +1,4 @@
+import has from './permission/has'
 import hasRole from './permission/hasRole'
 import hasPermi from './permission/hasPermi'
 import dialogDrag from './dialog/drag'
@@ -6,6 +7,7 @@ import dialogDragHeight from './dialog/dragHeight'
 import clipboard from './module/clipboard'
 
 const install = function(Vue) {
+  Vue.directive('has', hasRole)
   Vue.directive('hasRole', hasRole)
   Vue.directive('hasPermi', hasPermi)
   Vue.directive('clipboard', clipboard)
