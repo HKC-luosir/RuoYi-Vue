@@ -1,9 +1,20 @@
 /**
+ * 判断是否为外部链接
  * @param {string} path
  * @returns {Boolean}
  */
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
+}
+
+/**
+ * 判断是否为外部链接
+ * 例如：http://xxxx https://xxxx chrome:// tcp:// ....等都会返回true
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isExternalNew(path) {
+  return path.indexOf("://") !== -1
 }
 
 /**

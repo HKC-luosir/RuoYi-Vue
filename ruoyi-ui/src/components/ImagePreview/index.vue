@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { isExternal } from "@/utils/validate";
+import { isExternalNew } from "@/utils/validate";
+import logoImg from '@/assets/logo/logo.png'
 
 export default {
   name: "ImagePreview",
@@ -36,8 +37,12 @@ export default {
         return;
       }
       let real_src = this.src.split(",")[0];
-      if (isExternal(real_src)) {
+      if (isExternalNew(real_src)) {
         return real_src;
+      }
+      //判断如果地址为空则使用若依logo进行显示
+      if(real_src===""){
+        return logoImg;
       }
       return process.env.VUE_APP_BASE_API + real_src;
     },
@@ -48,8 +53,12 @@ export default {
       let real_src_list = this.src.split(",");
       let srcList = [];
       real_src_list.forEach(item => {
-        if (isExternal(item)) {
+        if (isExternalNew(item)) {
           return srcList.push(item);
+        }
+        //判断如果地址为空则使用若依logo进行显示
+        if(item===""){
+          return srcList.push(logoImg);
         }
         return srcList.push(process.env.VUE_APP_BASE_API + item);
       });
