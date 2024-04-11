@@ -498,6 +498,52 @@ public class ExcelUtil<T>
         }
         return list;
     }
+    /**
+     * 将多个已初始化的ExcelUtil中的sheet页合并到一个文件导出
+     *
+     * @param list 导出sheet数据集合
+     * @param filename 文件的名称
+     * @return 结果
+     */
+    public static AjaxResult exportMultipartExcel(List<ExcelUtil> list, String filename)
+    {
+        Workbook wb = new SXSSFWorkbook(500);
+        int offset = 0;
+        for (ExcelUtil excelUtil : list)
+        {
+            offset = excelUtil.writeSheet(wb, offset) + 1;
+        }
+
+        OutputStream out = null;
+        try
+        {
+            //原代码非静态方法 此处复制方法内容
+            //String filename = encodingFilename(sheetName);
+            //out = new FileOutputStream(getAbsoluteFile(filename));
+            filename =  UUID.randomUUID().toString() + "_" + filename + ".xlsx";;
+
+            String absoluteFile = RuoYiConfig.getDownloadPath() + filename;
+            File desc = new File(absoluteFile);
+            if (!desc.getParentFile().exists())
+            {
+                desc.getParentFile().mkdirs();
+            }
+
+            out = new FileOutputStream(absoluteFile);
+            wb.write(out);
+            return AjaxResult.success(filename);
+        }
+        catch (Exception e)
+        {
+            log.error("导出Excel异常{}", e.getMessage());
+            throw new UtilException("导出Excel失败，请联系网站管理员！");
+        }
+        finally
+        {
+            IOUtils.closeQuietly(wb);
+            IOUtils.closeQuietly(out);
+        }
+    }
 
     /**
      * 对list数据源将其里面的数据导入到excel表单
@@ -692,6 +738,53 @@ public class ExcelUtil<T>
                 fillExcelData(index, row);
                 addStatisticsRow();
             }
+        }
+    }
+
+    /**
+     * 将当前ExcelUtil中的数据写入到传入的Workbook中
+     *
+     * @param wb 要写入的Workbook
+     * @param offset 开始写入的 sheet 下标
+     * @return 写入后的总 sheet 数
+     */
+    public int writeSheet(Workbook wb, int offset) {
+        try {
+            // 取出一共有多少个sheet.
+            int sheetNo = Math.max(1, (int) Math.ceil(list.size() * 1.0 / sheetSize));
+            for (int index = 0; index <= sheetNo; index++)
+            {
+                this.sheet = wb.createSheet();
+                this.styles = createStyles(wb);
+                // 设置工作表的名称.
+                if (sheetNo == 0) {
+                    wb.setSheetName(index + offset, sheetName);
+                } else {
+                    wb.setSheetName(index + offset, sheetName + index);
+                }
+
+                // 产生一行
+                Row row = sheet.createRow(rownum);
+                int column = 0;
+                // 写入各个字段的列头名称
+                for (Object[] os : fields)
+                {
+                    Excel excel = (Excel) os[1];
+                    this.createCell(excel, row, column++);
+                }
+                if (Type.EXPORT.equals(type))
+                {
+                    fillExcelData(index, row);
+                    addStatisticsRow();
+                }
+            }
+            return offset + sheetNo;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            log.error("导出Excel异常{}", e.getMessage());
+            throw new UtilException("导出Excel失败，请联系网站管理员！");
         }
     }
 
