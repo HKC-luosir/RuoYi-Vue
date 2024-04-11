@@ -49,19 +49,11 @@
             />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select
-              v-model="queryParams.status"
-              placeholder="用户状态"
-              clearable
-              style="width: 240px"
-            >
-              <el-option
-                v-for="dict in dict.type.sys_normal_disable"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            <dict-select v-model="queryParams.status"
+               placeholder="用户状态"
+               clearable
+               style="width: 240px"
+               dict-type="sys_normal_disable"/>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
@@ -244,25 +236,14 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户性别">
-              <el-select v-model="form.sex" placeholder="请选择性别">
-                <el-option
-                  v-for="dict in dict.type.sys_user_sex"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
-              </el-select>
+              <dict-select v-model="queryParams.sex"
+                 placeholder="请选择性别"
+                 dict-type="sys_user_sex"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                  v-for="dict in dict.type.sys_normal_disable"
-                  :key="dict.value"
-                  :label="dict.value"
-                >{{dict.label}}</el-radio>
-              </el-radio-group>
+              <dict-select v-model="form.status" type="radio" dict-type="sys_normal_disable"/>
             </el-form-item>
           </el-col>
         </el-row>

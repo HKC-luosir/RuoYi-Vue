@@ -33,6 +33,8 @@ import ImageUpload from "@/components/ImageUpload"
 import ImagePreview from "@/components/ImagePreview"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
+// 字典标签组件
+import DictSelect from '@/components/DictSelect'
 // 头部标签组件
 import VueMeta from 'vue-meta'
 // 字典数据组件
@@ -51,6 +53,7 @@ Vue.prototype.handleTree = handleTree
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)
+Vue.component('DictSelect', DictSelect)
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 Vue.component('Editor', Editor)
