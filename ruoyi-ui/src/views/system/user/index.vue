@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" :style="containerStyle">
     <el-row :gutter="20">
       <!--部门数据-->
       <el-col :span="4" :xs="24">
@@ -136,7 +136,7 @@
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </el-row>
 
-        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :data="userList" :height="tableHeight" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
           <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
@@ -384,6 +384,13 @@ export default {
       roleOptions: [],
       // 表单参数
       form: {},
+      // 表格高度
+      tableHeight: 0,
+      // 页面样式
+      containerStyle: {
+        height: null,
+        'overflow-y': 'hidden'
+      },
       defaultProps: {
         children: "children",
         label: "label"
@@ -460,6 +467,7 @@ export default {
     }
   },
   created() {
+    this.loadTableHeight();
     this.getList();
     this.getDeptTree();
     this.getConfigKey("sys.user.initPassword").then(response => {
@@ -467,6 +475,20 @@ export default {
     });
   },
   methods: {
+    /** 加载表格高度 */
+    loadTableHeight() {
+      const self = this
+      const windowHeight = window.document.documentElement.clientHeight
+      self.containerStyle.height = windowHeight - 85 + 'px' // 设置页面高度
+      // self.cardBodyStyle.height = windowHeight - 130 + 'px' // 卡片body高度
+      self.tableHeight = windowHeight - 330 // 设置表格高度
+      window.onresize = function () {
+        const wHeight = window.document.documentElement.clientHeight
+        self.containerStyle.height = wHeight - 85 + 'px' // 设置页面高度
+        // self.cardBodyStyle.height = wHeight - 130 + 'px' // 卡片高度
+        self.tableHeight = wHeight - 330 // 设置表格高度
+      }
+    },
     /** 查询用户列表 */
     getList() {
       this.loading = true;
