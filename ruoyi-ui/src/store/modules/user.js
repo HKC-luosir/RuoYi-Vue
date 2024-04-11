@@ -1,5 +1,6 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import tab from "@/plugins/tab";
 
 const user = {
   state: {
@@ -80,7 +81,9 @@ const user = {
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])
           removeToken()
-          resolve()
+          tab.closeAllPage().then(() => {
+            resolve()
+          });
         }).catch(error => {
           reject(error)
         })
