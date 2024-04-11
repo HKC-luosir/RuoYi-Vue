@@ -64,6 +64,12 @@ Vue.use(VueMeta)
 DictData.install()
 
 /**
+ * 模态框点击阴影部分不关闭
+ */
+import ElementUI from 'element-ui'
+ElementUI.Dialog.props.closeOnClickModal.default = false
+
+/**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
  * you can execute: mockXHR()
