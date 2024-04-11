@@ -72,7 +72,7 @@ public class SysConfigServiceImpl implements ISysConfigService
         SysConfig config = new SysConfig();
         config.setConfigKey(configKey);
         SysConfig retConfig = configMapper.selectConfig(config);
-        if (StringUtils.isNotNull(retConfig))
+        if (StringUtils.isNotNull(retConfig.getConfigValue()))
         {
             redisCache.setCacheObject(getCacheKey(configKey), retConfig.getConfigValue());
             return retConfig.getConfigValue();
