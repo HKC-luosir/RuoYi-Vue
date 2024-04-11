@@ -137,7 +137,7 @@ public class FileUploadUtils
                 desc.getParentFile().mkdirs();
             }
         }
-        return desc;
+        return new File(desc.getCanonicalPath());
     }
 
     public static final String getPathFileName(String uploadDir, String fileName) throws IOException
