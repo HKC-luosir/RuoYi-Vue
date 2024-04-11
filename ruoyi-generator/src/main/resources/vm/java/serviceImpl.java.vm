@@ -18,6 +18,10 @@ import ${packageName}.domain.${subClassName};
 import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.service.I${ClassName}Service;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.util.CollectionUtils;
 
 /**
  * ${functionName}Service业务层处理
@@ -30,6 +34,9 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
 {
     @Autowired
     private ${ClassName}Mapper ${className}Mapper;
+
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     /**
      * 查询${functionName}
@@ -79,6 +86,41 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
 #else
         return ${className}Mapper.insert${ClassName}(${className});
 #end
+    }
+
+    /**
+     * 批量新增${functionName}
+     *
+     * @param ${className}s ${functionName}List
+     * @return 结果
+     */
+    @Override
+    public int batchInsert${ClassName}(List<${ClassName}> ${className}s)
+    {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
+        int count = 0;
+        if (!CollectionUtils.isEmpty(${className}s)) {
+            try {
+                for (int i = 0; i < ${className}s.size(); i++) {
+                    int row = ${className}Mapper.insert${ClassName}(${className}s.get(i));
+                    // 防止内存溢出，每100次提交一次,并清除缓存
+                    boolean bool = (i >0 && i%100 == 0) || i == ${className}s.size() - 1;
+                    if (bool){
+                        sqlSession.commit();
+                        sqlSession.clearCache();
+                    }
+                    count = i + 1;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                // 没有提交的数据可以回滚
+                sqlSession.rollback();
+            }finally {
+                sqlSession.close();
+                return count;
+            }
+        }
+        return count;
     }
 
     /**
