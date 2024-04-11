@@ -56,26 +56,25 @@ public class GenUtils
             column.setJavaType(GenConstants.TYPE_DATE);
             column.setHtmlType(GenConstants.HTML_DATETIME);
         }
-        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType))
+        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER_INT, dataType))
         {
-            column.setHtmlType(GenConstants.HTML_INPUT);
-
-            // 如果是浮点型 统一用BigDecimal
-            String[] str = StringUtils.split(StringUtils.substringBetween(column.getColumnType(), "(", ")"), ",");
-            if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0)
-            {
-                column.setJavaType(GenConstants.TYPE_BIGDECIMAL);
-            }
-            // 如果是整形
-            else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10)
-            {
-                column.setJavaType(GenConstants.TYPE_INTEGER);
-            }
-            // 长整形
-            else
-            {
-                column.setJavaType(GenConstants.TYPE_LONG);
-            }
+        	column.setHtmlType(GenConstants.HTML_INPUT);
+        	column.setJavaType(GenConstants.TYPE_INTEGER);
+        }
+        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER_LONG, dataType))
+        {
+        	column.setHtmlType(GenConstants.HTML_INPUT);
+        	column.setJavaType(GenConstants.TYPE_LONG);
+        }
+        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER_REAL, dataType))
+        {
+        	column.setHtmlType(GenConstants.HTML_INPUT);
+        	column.setJavaType(GenConstants.TYPE_BIGDECIMAL);
+        }
+        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER_BIT, dataType))
+        {
+        	column.setHtmlType(GenConstants.HTML_RADIO);
+        	column.setJavaType(GenConstants.TYPE_BIGDECIMAL);
         }
 
         // 插入字段（默认所有字段都需要插入）

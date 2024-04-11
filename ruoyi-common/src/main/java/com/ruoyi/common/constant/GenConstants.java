@@ -44,6 +44,18 @@ public class GenConstants
     public static final String[] COLUMNTYPE_NUMBER = { "tinyint", "smallint", "mediumint", "int", "number", "integer",
             "bit", "bigint", "float", "double", "decimal" };
 
+    /** 数据库数字类型 */
+    public static final String[] COLUMNTYPE_NUMBER_BIT = { "bit" };
+    
+    /** 数据库数字类型 */
+    public static final String[] COLUMNTYPE_NUMBER_INT = { "tinyint", "smallint", "mediumint", "int", "number", "integer" };
+    
+    /** 数据库数字类型 */
+    public static final String[] COLUMNTYPE_NUMBER_LONG = { "bigint" };
+    
+    /** 数据库数字类型 */
+    public static final String[] COLUMNTYPE_NUMBER_REAL = { "float", "double", "decimal" };
+
     /** 页面不需要编辑字段 */
     public static final String[] COLUMNNAME_NOT_EDIT = { "id", "create_by", "create_time", "del_flag" };
 
@@ -87,6 +99,9 @@ public class GenConstants
 
     /** 富文本控件 */
     public static final String HTML_EDITOR = "editor";
+
+    /** 布尔类型 */
+    public static final String TYPE_BOOLEAN = "Boolean";
 
     /** 字符串类型 */
     public static final String TYPE_STRING = "String";
