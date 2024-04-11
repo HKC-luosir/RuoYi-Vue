@@ -1,4 +1,9 @@
 module.exports = {
+
+  /**
+   * 布局风格 左右布局：left-right 上下布局：up-down
+   */
+  layoutType: 'left-right',
   /**
    * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
    */
