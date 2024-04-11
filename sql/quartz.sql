@@ -48,7 +48,7 @@ create table QRTZ_TRIGGERS (
     misfire_instr        smallint(2)     null                comment '补偿执行的策略',
     job_data             blob            null                comment '存放持久化job对象',
     primary key (sched_name, trigger_name, trigger_group),
-    foreign key (sched_name, job_name, job_group) references QRTZ_JOB_DETAILS(sched_name, job_name, job_group)
+    constraint FK_QRTZ_TRIGGERS foreign key (sched_name, job_name, job_group) references QRTZ_JOB_DETAILS(sched_name, job_name, job_group)
 ) engine=innodb comment = '触发器详细信息表';
 
 -- ----------------------------
