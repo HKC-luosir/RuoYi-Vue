@@ -8,7 +8,9 @@
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <!-- resolvePath() method will cause path repeated here when multi-level directory，just replace with basePath-->
+    <!-- resolvePath() 会导致多级目录时重复拼接，用到submenu index时发现，使用basePath代替即可修复-->
+    <el-submenu v-else ref="subMenu" :index="basePath" popper-append-to-body>
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
