@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.common;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +59,8 @@ public class CommonController
 
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             FileUtils.setAttachmentResponseHeader(response, realFileName);
-            FileUtils.writeBytes(filePath, response.getOutputStream());
+            //FileUtils.writeBytes(filePath, response.getOutputStream());
+            Files.copy(FileSystems.getDefault().getPath(filePath),response.getOutputStream());
             if (delete)
             {
                 FileUtils.deleteFile(filePath);
@@ -153,7 +156,8 @@ public class CommonController
             String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             FileUtils.setAttachmentResponseHeader(response, downloadName);
-            FileUtils.writeBytes(downloadPath, response.getOutputStream());
+            //FileUtils.writeBytes(downloadPath, response.getOutputStream());
+            Files.copy(FileSystems.getDefault().getPath(downloadPath),response.getOutputStream());
         }
         catch (Exception e)
         {
