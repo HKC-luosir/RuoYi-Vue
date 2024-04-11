@@ -3,6 +3,7 @@ package com.ruoyi.framework.interceptor.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,7 @@ import com.ruoyi.framework.interceptor.RepeatSubmitInterceptor;
 /**
  * 判断请求url和数据是否和上一次相同，
  * 如果和上次相同，则是重复提交表单。 有效时间为10秒内。
- * 
+ *
  * @author ruoyi
  */
 @Component
@@ -28,6 +29,8 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
     public final String REPEAT_PARAMS = "repeatParams";
 
     public final String REPEAT_TIME = "repeatTime";
+
+    private ReentrantLock lock = new ReentrantLock();
 
     // 令牌自定义标识
     @Value("${token.header}")
@@ -65,22 +68,31 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
         // 唯一标识（指定key + url + 消息头）
         String cacheRepeatKey = CacheConstants.REPEAT_SUBMIT_KEY + url + submitKey;
 
-        Object sessionObj = redisCache.getCacheObject(cacheRepeatKey);
-        if (sessionObj != null)
-        {
-            Map<String, Object> sessionMap = (Map<String, Object>) sessionObj;
-            if (sessionMap.containsKey(url))
+        // 加锁保证并发安全问题，若集群部署需改为分布式锁，需要的可以集成redisson使用分布式锁
+        try{
+            if(!lock.tryLock()){
+                return true;
+            }
+            Object sessionObj = redisCache.getCacheObject(cacheRepeatKey);
+            if (sessionObj != null)
             {
-                Map<String, Object> preDataMap = (Map<String, Object>) sessionMap.get(url);
-                if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap, annotation.interval()))
+                Map<String, Object> sessionMap = (Map<String, Object>) sessionObj;
+                if (sessionMap.containsKey(url))
                 {
-                    return true;
+                    Map<String, Object> preDataMap = (Map<String, Object>) sessionMap.get(url);
+                    if (compareParams(nowDataMap, preDataMap) && compareTime(nowDataMap, preDataMap, annotation.interval()))
+                    {
+                        return true;
+                    }
                 }
             }
+            Map<String, Object> cacheMap = new HashMap<String, Object>();
+            cacheMap.put(url, nowDataMap);
+            redisCache.setCacheObject(cacheRepeatKey, cacheMap, annotation.interval(), TimeUnit.MILLISECONDS);
+        }finally {
+            lock.unlock();
         }
-        Map<String, Object> cacheMap = new HashMap<String, Object>();
-        cacheMap.put(url, nowDataMap);
-        redisCache.setCacheObject(cacheRepeatKey, cacheMap, annotation.interval(), TimeUnit.MILLISECONDS);
+
         return false;
     }
 
