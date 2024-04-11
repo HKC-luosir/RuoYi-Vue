@@ -197,6 +197,11 @@
         <el-form-item label="${comment}" prop="${field}">
           <el-input v-model="form.${field}" placeholder="请输入${comment}" />
         </el-form-item>
+#elseif($column.htmlType == "inputNumber")
+        <el-form-item label="${comment}" prop="${field}">
+          <el-input type="number" v-model.number="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+
 #elseif($column.htmlType == "imageUpload")
         <el-form-item label="${comment}" prop="${field}">
           <image-upload v-model="form.${field}"/>
@@ -312,6 +317,12 @@
               <el-input v-model="scope.row.$javaField" placeholder="请输入$comment" />
             </template>
           </el-table-column>
+#elseif($column.list && $column.htmlType == "inputNumber")
+        <el-table-column label="$comment" prop="${javaField}" width="150">
+          <template slot-scope="scope">
+            <el-input type="number" v-model.number="scope.row.$javaField" placeholder="请输入$comment" />
+          </template>
+        </el-table-column>
 #elseif($column.list && $column.htmlType == "datetime")
           <el-table-column label="$comment" prop="${javaField}" width="240">
             <template slot-scope="scope">
