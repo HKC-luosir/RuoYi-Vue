@@ -343,7 +343,7 @@
 </template>
 
 <script setup name="${BusinessName}">
-import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}";
+import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, copy${BusinessName} } from "@/api/${moduleName}/${businessName}";
 
 const { proxy } = getCurrentInstance();
 #if(${dicts} != '')
@@ -499,6 +499,17 @@ function handleUpdate(row) {
 #end
     open.value = true;
     title.value = "修改${functionName}";
+  });
+}
+
+/**复制按钮操作 */
+function handleCopy(row) {
+  reset();
+  const _${pkColumn.javaField} = row.${pkColumn.javaField} || ids.value;
+  copy${BusinessName}(_${pkColumn.javaField}).then((response) => {
+    form.value = response.data;
+    open.value = true;
+    title.value = "新增${functionName}";
   });
 }
 

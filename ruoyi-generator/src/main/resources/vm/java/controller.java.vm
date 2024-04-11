@@ -112,4 +112,18 @@ public class ${ClassName}Controller extends BaseController
     {
         return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s));
     }
+
+    /**
+     * 复制${functionName}
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:copy')")
+    @Log(title = "${functionName}", businessType = BusinessType.COPY)
+    @GetMapping("/copy/{${pkColumn.javaField}}")
+    public AjaxResult copy(@PathVariable ${pkColumn.javaType} ${pkColumn.javaField}) {
+        ${ClassName} result = ${className}Service.select${ClassName}ById(${pkColumn.javaField});
+        if (result == null)
+            AjaxResult.error("找不到${functionName}编号为'" +${pkColumn.javaField}+ "'的数据");
+        result.set${pkColumn.javaField.substring(0,1).toUpperCase()}${pkColumn.javaField.substring(1)}(null);
+        return AjaxResult.success(result);
+    }
 }

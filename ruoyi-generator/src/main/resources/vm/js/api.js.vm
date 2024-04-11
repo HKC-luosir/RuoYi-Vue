@@ -42,3 +42,11 @@ export function del${BusinessName}(${pkColumn.javaField}) {
     method: 'delete'
   })
 }
+
+// 复制${functionName}
+export function copy${BusinessName}(${pkColumn.javaField}) {
+  return request({
+    url: '/${moduleName}/${businessName}/copy/' + ${pkColumn.javaField},
+    method: 'get'
+  })
+}
