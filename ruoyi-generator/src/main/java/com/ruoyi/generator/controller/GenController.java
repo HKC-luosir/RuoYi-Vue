@@ -37,7 +37,7 @@ import com.ruoyi.generator.service.IGenTableService;
 
 /**
  * 代码生成 操作处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -63,7 +63,7 @@ public class GenController extends BaseController
     }
 
     /**
-     * 修改代码生成业务
+     * 查询代码生成业务
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:query')")
     @GetMapping(value = "/{tableId}")

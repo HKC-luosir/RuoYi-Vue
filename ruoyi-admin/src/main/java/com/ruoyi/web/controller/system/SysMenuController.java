@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.common.core.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -42,6 +44,18 @@ public class SysMenuController extends BaseController
     {
         List<SysMenu> menus = menuService.selectMenuList(menu, getUserId());
         return success(menus);
+    }
+
+    /**
+     * 分页获取菜单列表
+     */
+    @PreAuthorize("@ss.hasPermi('system:menu:list')")
+    @GetMapping("/listTreeByPage")
+    public TableDataInfo listTreeByPage(SysMenu menu)
+    {
+        startPage();
+        List<SysMenu> menus = menuService.selectTreeByPage(menu, getUserId());
+        return getDataTable(menus);
     }
 
     /**

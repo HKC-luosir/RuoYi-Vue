@@ -80,6 +80,60 @@ public class SysMenuServiceImpl implements ISysMenuService
     }
 
     /**
+     * 分页查询菜单树
+     *
+     * @param menu
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysMenu> selectTreeByPage(SysMenu menu, Long userId)
+    {
+        List<SysMenu> menuList = null;
+        menu.setParentId(0L);
+
+        // 管理员显示所有菜单信息
+        if (SysUser.isAdmin(userId)) {
+            menuList = menuMapper.selectMenuList(menu);
+        }
+        else
+        {
+            menu.getParams().put("userId", userId);
+            menuList = menuMapper.selectMenuListByUserId(menu);
+        }
+        return findChildren(menuList, userId);
+    }
+
+    public List<SysMenu> findChildren(List<SysMenu> sysMenuList, Long userId)
+    {
+        List<SysMenu> children = null;
+        SysMenu menu = new SysMenu();
+
+        for (SysMenu sysMenu : sysMenuList)
+        {
+            menu.setParentId(sysMenu.getMenuId());
+
+            // 管理员显示所有菜单信息
+            if (SysUser.isAdmin(userId))
+            {
+                children = menuMapper.selectMenuList(menu);
+            }
+            else
+            {
+                menu.getParams().put("userId", userId);
+                children = menuMapper.selectMenuListByUserId(menu);
+            }
+
+            if (StringUtils.isNotNull(children) && children.size() > 0)
+            {
+                findChildren(children, userId);
+                sysMenu.setChildren(children);
+            }
+        }
+        return sysMenuList;
+    }
+
+    /**
      * 根据用户ID查询权限
      * 
      * @param userId 用户ID

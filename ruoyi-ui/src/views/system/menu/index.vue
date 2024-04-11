@@ -102,6 +102,14 @@
       </el-table-column>
     </el-table>
 
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
     <!-- 添加或修改菜单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="680px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
@@ -274,7 +282,7 @@
 </template>
 
 <script>
-import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
+import { listMenu, getMenu, delMenu, addMenu, updateMenu, listTreeByPage } from "@/api/system/menu";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import IconSelect from "@/components/IconSelect";
@@ -303,9 +311,12 @@ export default {
       refreshTable: true,
       // 查询参数
       queryParams: {
+        pageNum: 1,
+        pageSize: 10,
         menuName: undefined,
         visible: undefined
       },
+      total: 0,
       // 表单参数
       form: {},
       // 表单校验
@@ -333,8 +344,9 @@ export default {
     /** 查询菜单列表 */
     getList() {
       this.loading = true;
-      listMenu(this.queryParams).then(response => {
-        this.menuList = this.handleTree(response.data, "menuId");
+      listTreeByPage(this.queryParams).then(response => {
+        this.menuList = response.rows;
+        this.total = response.total;
         this.loading = false;
       });
     },
