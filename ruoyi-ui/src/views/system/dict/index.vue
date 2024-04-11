@@ -124,12 +124,23 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="680"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+        fixed="right"
+        width="180"
+      >
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -345,3 +356,29 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.el-table__body-wrapper::-webkit-scrollbar {
+  // 表格右侧滚动
+  width: 16px !important;
+  // 表格下方滚动
+  height: 16px !important;
+}
+
+// 让固定列的高自适应，且设置!important覆盖ele-ui的默认样式
+// 16px 为滚动条的高度
+.el-table__fixed,
+.el-table__fixed-right {
+  height: calc(100% - 16px) !important;
+}
+
+// 当表格没有滚动条时
+.el-table__body-wrapper.is-scrolling-none ~ .el-table__fixed-right,
+.el-table__body-wrapper.is-scrolling-none ~ .el-table__fixed {
+  right: 16px !important;
+  height: 100% !important;
+  box-shadow: none !important;
+}
+.el-table__fixed-body-wrapper .el-table__body {
+  padding-bottom: 16px; // 滚动条高度
+}
+</style>
