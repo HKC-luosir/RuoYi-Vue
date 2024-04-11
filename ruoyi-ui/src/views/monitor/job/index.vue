@@ -237,7 +237,7 @@
     </el-dialog>
 
     <el-dialog title="Cron表达式生成器" :visible.sync="openCron" append-to-body destroy-on-close class="scrollbar">
-      <crontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
+      <vcrontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></vcrontab>
     </el-dialog>
 
     <!-- 任务日志详细 -->
@@ -292,10 +292,10 @@
 
 <script>
 import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from "@/api/monitor/job";
-import Crontab from '@/components/Crontab'
+import vcrontab from 'vcrontab'
 
 export default {
-  components: { Crontab },
+  components: { vcrontab },
   name: "Job",
   dicts: ['sys_job_group', 'sys_job_status'],
   data() {
