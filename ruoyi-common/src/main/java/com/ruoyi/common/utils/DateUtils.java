@@ -32,6 +32,50 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
             "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM", 
             "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
             "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM"};
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT_DEFAULT = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		}
+	};
+	private static final ThreadLocal<SimpleDateFormat> DATEFORMAT_YYYYMMDDHHMMSSSSS = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+		}
+	};
+	private static final ThreadLocal<SimpleDateFormat> DATEFORMAT_YYYYMMDDHHMMSS = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyyMMddHHmmss");
+		}
+	};
+	private static final ThreadLocal<SimpleDateFormat> DATEFORMAT_YYYYMMDDHHMMSS_SSS = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		}
+	};
+	private static final ThreadLocal<SimpleDateFormat> DATEFORMAT_YYYYMMDD = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyy-MM-dd");
+		}
+	};
+
+	private static final ThreadLocal<SimpleDateFormat> DATEFORMAT_YYYYMM = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyy-MM");
+		}
+	};
+	private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT_DEFAULT_WITH_T = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue(){
+			return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		}
+	};
+
 
     /**
      * 获取当前Date型日期
@@ -40,7 +84,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
      */
     public static Date getNowDate()
     {
-        return new Date();
+        return DATE_FORMAT_DEFAULT.get().format(new Date());
     }
 
     /**
