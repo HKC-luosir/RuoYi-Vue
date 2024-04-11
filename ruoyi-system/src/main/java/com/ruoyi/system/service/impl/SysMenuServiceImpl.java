@@ -354,7 +354,8 @@ public class SysMenuServiceImpl implements ISysMenuService
      */
     public String getRouteName(SysMenu menu)
     {
-        String routerName = StringUtils.capitalize(menu.getPath());
+    	String path = menu.getPath().replaceAll("[^a-zA-Z0-9_]+", "_");
+        String routerName = StringUtils.capitalize(path);
         // 非外链并且是一级目录（类型为目录）
         if (isMenuFrame(menu))
         {
