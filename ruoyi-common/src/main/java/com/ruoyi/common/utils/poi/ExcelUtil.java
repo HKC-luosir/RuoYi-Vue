@@ -357,13 +357,33 @@ public class ExcelUtil<T>
             Map<String, Integer> cellMap = new HashMap<String, Integer>();
             // 获取表头
             Row heard = sheet.getRow(titleNum);
+            int nullIndex = 1;
             for (int i = 0; i < heard.getPhysicalNumberOfCells(); i++)
             {
                 Cell cell = heard.getCell(i);
                 if (StringUtils.isNotNull(cell))
                 {
                     String value = this.getCellValue(heard, i).toString();
-                    cellMap.put(value, i);
+                    // 处理表中重复字段标题
+                    if (cellMap.get(value) != null)
+                    {
+                        int repeat = 1;
+                        do
+                         {
+                            repeat++;
+                        } while(cellMap.get(value + repeat) != null);
+                        cellMap.put(value + repeat, i);
+                    }
+                    else
+                    {
+                        cellMap.put(value, i);
+                    }
+                    // 处理多级表头为空的段落
+                    if (StringUtils.isEmpty(value))
+                    {
+                        cellMap.put(nullIndex + "", i);
+                        nullIndex++;
+                    }
                 }
                 else
                 {
