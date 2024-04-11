@@ -34,7 +34,7 @@ public class GenUtils
      */
     public static void initColumnField(GenTableColumn column, GenTable table)
     {
-        String dataType = getDbType(column.getColumnType());
+        String dataType = getDbType(column.getColumnType()).replaceAll(" unsigned", "");
         String columnName = column.getColumnName();
         column.setTableId(table.getTableId());
         column.setCreateBy(table.getCreateBy());
@@ -67,7 +67,7 @@ public class GenUtils
                 column.setJavaType(GenConstants.TYPE_BIGDECIMAL);
             }
             // 如果是整形
-            else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10)
+            else if ((str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) || dataType.equalsIgnoreCase("int"))
             {
                 column.setJavaType(GenConstants.TYPE_INTEGER);
             }
