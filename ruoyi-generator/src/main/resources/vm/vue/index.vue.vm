@@ -31,7 +31,7 @@
           />
         </el-select>
       </el-form-item>
-#elseif(($column.htmlType == "select" || $column.htmlType == "radio") && $dictType)
+#elseif(($column.htmlType == "select" || $column.htmlType == "radio"))
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable>
           <el-option label="请选择字典生成" value="" />
@@ -224,7 +224,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-#elseif($column.htmlType == "select" && $dictType)
+#elseif($column.htmlType == "select")
         <el-form-item label="${comment}" prop="${field}">
           <el-select v-model="form.${field}" placeholder="请选择${comment}">
             <el-option label="请选择字典生成" value="" />
@@ -241,7 +241,7 @@
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-#elseif($column.htmlType == "checkbox" && $dictType)
+#elseif($column.htmlType == "checkbox")
         <el-form-item label="${comment}" prop="${field}">
           <el-checkbox-group v-model="form.${field}">
             <el-checkbox>请选择字典生成</el-checkbox>
@@ -261,7 +261,7 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-#elseif($column.htmlType == "radio" && $dictType)
+#elseif($column.htmlType == "radio")
         <el-form-item label="${comment}" prop="${field}">
           <el-radio-group v-model="form.${field}">
             <el-radio label="1">请选择字典生成</el-radio>
